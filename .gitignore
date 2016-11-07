@@ -1,0 +1,41 @@
+# PyCharm
+/.idea
+
+# Python
+__pycache__/
+
+# Vagrant directory
+/.vagrant
+
+# OSX stuff
+.DS_Store
+._*
+.Trashes
+
+# Windows stuff
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Virtual environment
+/venv/
+
+# Logs
+/logs/
+
+# Run
+/run/
+
+# Static root
+/static/static_root/*
+!/static/static_root/.gitkeep
+
+# Bower
+/static/static_dirs/vendor/
+
+# Media files
+/static/media/*
+!/static/media/.gitkeep
+
+# Environment variables
+.env

@@ -1,0 +1,38 @@
+[
+  {
+    "model": "push_notifications.apnsdevice",
+    "pk": 1,
+    "fields": {
+      "name": "Admin Token",
+      "active": true,
+      "user": 1,
+      "device_id": null,
+      "registration_id": "FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660",
+      "date_created": "2016-10-03T15:23:06.870Z"
+    }
+  },
+  {
+    "model": "push_notifications.apnsdevice",
+    "pk": 1,
+    "fields": {
+      "name": "John Token",
+      "active": true,
+      "user": 2,
+      "device_id": null,
+      "registration_id": "FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660",
+      "date_created": "2016-10-03T15:23:06.870Z"
+    }
+  },
+  {
+    "model": "push_notifications.apnsdevice",
+    "pk": 1,
+    "fields": {
+      "name": "Jane Token",
+      "active": true,
+      "user": 3,
+      "device_id": null,
+      "registration_id": "FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660",
+      "date_created": "2016-10-03T15:23:06.870Z"
+    }
+  }
+]

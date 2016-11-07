@@ -1,0 +1,5 @@
+'base':
+  '*':
+    - node
+    - postgres
+    - apache

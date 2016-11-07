@@ -1,0 +1,13 @@
+Django==1.10
+psycopg2==2.6
+redis==2.10
+djangorestframework==3.5
+djangorestframework-gis==0.10.1
+django-rest-swagger==0.3.10
+django-allauth==0.27.0
+django-rest-auth==0.8.1
+django-push-notifications==1.4.1
+cloudinary==1.4.0
+Pillow==3.3.1
+python-dateutil==2.5.3
+facebook-sdk==2.0.0
