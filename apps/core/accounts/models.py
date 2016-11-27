@@ -1,14 +1,27 @@
 # -*- coding: utf-8 -*-
 
 # Stdlib imports
+import os
 import six
+import dateutil.parser
 
 # Core Django imports
 from django.contrib.auth.validators import UnicodeUsernameValidator, ASCIIUsernameValidator
+from django.db.models import Q
 from django.utils import timezone
 from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
+from django.dispatch import receiver
+from django.conf import settings
+
+# Third-party apps imports
+from allauth.account.signals import user_signed_up
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from allauth.socialaccount.models import SocialAccount, SocialToken
+import facebook
 
 # Local apps imports
 from apps.core.images.models import Image
@@ -71,15 +84,90 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Connection(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='connections', on_delete=models.CASCADE)
+    social_account = models.ForeignKey(SocialAccount)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "auth_user_connection"
+        unique_together = (("owner", "social_account"),)
 
 
 class Lists(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lists', on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "auth_user_list"
 
 
 class Gift(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "auth_user_gift"
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Signals
+# ----------------------------------------------------------------------------------------------------------------------
+
+@receiver(user_signed_up)
+def add_social_fields(sender, **kwargs):
+    """ Add social fields to User """
+    user = kwargs.get('user', None)
+    if user is not None:
+        social_account = SocialAccount.objects.get(user=user)
+        social_token = SocialToken.objects.get(account=social_account)
+
+        social_login = kwargs.get('sociallogin', None)
+        if social_login is not None:
+            """ Assign FB ID to profile. """
+            user.facebook_id = social_login.account.extra_data.get('id')
+            user.save()
+
+            """ Assign FB profile picture to user. """
+            try:
+                image_url = 'http://graph.facebook.com/{}/picture?height=1000&width=1000'.format(
+                    social_login.account.extra_data.get('id'))
+                uploaded_image = cloudinary.uploader.upload(image_url)
+
+                image = Image(owner=user, public_id=uploaded_image['public_id'], version=uploaded_image['version'],
+                              width=uploaded_image['width'], height=uploaded_image['height'], url=uploaded_image['url'],
+                              format=uploaded_image['format'], bytes=uploaded_image['bytes'],
+                              secure_url=uploaded_image['secure_url'], env=os.environ.get("APP_ENVIRONMENT", "local"))
+
+                image.save()
+                user.avatar = image
+                user.save()
+            except cloudinary.uploader.Error:
+                pass
+
+            """ Assign birthday, gender. """
+            user.birthday = dateutil.parser.parse(social_login.account.extra_data.get('birthday'))
+            user.gender = social_login.account.extra_data.get('gender')
+            user.save()
+
+            """ Add connections. """
+            graph = facebook.GraphAPI(access_token=social_token.token, version='2.7')
+            friends = graph.get_connections(id=social_account.uid, connection_name='friends', fields='id')
+
+            friends_ids = [friend['id'] for friend in friends['data']]
+
+            for friend_id in friends_ids:
+                try:
+                    connection_account = SocialAccount.objects.filter(Q(uid=friend_id) & Q(provider='facebook'))
+                    Connection.objects.get_or_create(owner=user, social_account=connection_account)
+                except SocialAccount.DoesNotExist:
+                    pass
+
+            """ Add default lists. """
+            wish_lists = ['Birthday', 'New year', 'Thanksgiving']
+
+            for wish_list in wish_lists:
+                Lists.objects.get_or_create(owner=user, name=wish_list)
