@@ -1,8 +1,6 @@
 'base':
   '*':
     - packages
-    - node
-    - bower
     - postgres
     - postgres.server
     - postgres.client
