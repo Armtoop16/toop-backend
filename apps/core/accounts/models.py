@@ -25,6 +25,7 @@ import facebook
 # Local apps imports
 from apps.core.connections.models import Connection
 from apps.core.images.models import Image
+from apps.core.lists.models import Lists
 from .manager import UserManager
 
 
@@ -81,9 +82,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'user'
         verbose_name_plural = 'users'
         db_table = "auth_user"
-
-
-
 
 
 # ----------------------------------------------------------------------------------------------------------------------
