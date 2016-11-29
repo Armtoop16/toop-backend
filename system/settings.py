@@ -190,13 +190,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Django Rest Swagger
-
-SWAGGER_SETTINGS = {
-    'is_authenticated': True,
-    'is_superuser': True,
-}
-
 # Cloudinary
 
 cloudinary.config(
