@@ -5,9 +5,8 @@ from django.contrib.auth import get_user_model
 
 # Third-party app imports
 from rest_framework import mixins, viewsets
-from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import list_route
 from rest_framework.permissions import IsAuthenticated
 
 # Local apps imports
