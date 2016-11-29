@@ -34,14 +34,3 @@ class UserViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.G
         serializer = UserSerializer(instance=user)
 
         return Response(data=serializer.data)
-
-    @detail_route(methods=['DELETE'])
-    def deactivate(self, request, pk=None):
-        """ Deactivate account """
-        user = self.get_object()
-        self.check_object_permissions(request=request, obj=user)
-
-        user.is_active = False
-        user.save()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -101,25 +101,3 @@ class AccountsTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.john_token)
         response = self.client.patch('/api/v1/accounts/11/')
         self.assertEqual(response.status_code, 404)
-
-    def test_deactivate_action(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.john_token)
-        response = self.client.delete('/api/v1/accounts/2/deactivate/')
-        self.assertEqual(response.status_code, 204)
-
-        response = self.client.get('/api/v1/accounts/2/')
-        self.assertEqual(response.status_code, 401)
-
-    def test_deactivate_action_not_authenticated(self):
-        response = self.client.delete('/api/v1/accounts/2/deactivate/')
-        self.assertEqual(response.status_code, 401)
-
-    def test_deactivate_action_not_authorized(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.john_token)
-        response = self.client.delete('/api/v1/accounts/1/deactivate/')
-        self.assertEqual(response.status_code, 403)
-
-    def test_deactivate_action_not_found(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.john_token)
-        response = self.client.delete('/api/v1/accounts/11/deactivate/')
-        self.assertEqual(response.status_code, 404)
