@@ -53,6 +53,12 @@ INSTALLED_APPS = (
 
     'apps.cli',
     'apps.core.accounts',
+    'apps.core.collaborations',
+    'apps.core.connections',
+    'apps.core.companies',
+    'apps.core.gifts',
+    'apps.core.lists',
+    'apps.core.toops',
     'apps.core.images',
     'apps.web.home',
 )
