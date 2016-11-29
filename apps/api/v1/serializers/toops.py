@@ -4,9 +4,9 @@
 from rest_framework import serializers
 
 # Local apps imports
-from apps.core.companies.models import Company
+from apps.core.toops.models import Toop
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class ToopSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Company
+        model = Toop

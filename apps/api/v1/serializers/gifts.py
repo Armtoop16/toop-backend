@@ -4,9 +4,9 @@
 from rest_framework import serializers
 
 # Local apps imports
-from apps.core.companies.models import Company
+from apps.core.gifts.models import Gift
 
 
-class CompanySerializer(serializers.ModelSerializer):
+class GiftSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Company
+        model = Gift
