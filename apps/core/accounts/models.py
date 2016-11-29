@@ -13,7 +13,6 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.dispatch import receiver
-from django.conf import settings
 
 # Third-party apps imports
 from allauth.account.signals import user_signed_up
@@ -24,6 +23,7 @@ from allauth.socialaccount.models import SocialAccount, SocialToken
 import facebook
 
 # Local apps imports
+from apps.core.connections.models import Connection
 from apps.core.images.models import Image
 from .manager import UserManager
 
@@ -83,34 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = "auth_user"
 
 
-class Connection(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='connections', on_delete=models.CASCADE)
-    social_account = models.ForeignKey(SocialAccount)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        db_table = "auth_user_connection"
-        unique_together = (("owner", "social_account"),)
-
-
-class Lists(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lists', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, null=True, blank=True)
-    date = models.DateField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = "auth_user_list"
-
-
-class Gift(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = "auth_user_gift"
 
 
 # ----------------------------------------------------------------------------------------------------------------------
