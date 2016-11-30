@@ -10,3 +10,4 @@ from apps.core.toops.models import Toop
 class ToopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Toop
+        fields = '__all__'

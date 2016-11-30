@@ -10,3 +10,4 @@ from apps.core.gifts.models import Gift
 class GiftSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gift
+        fields = '__all__'

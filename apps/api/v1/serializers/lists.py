@@ -10,3 +10,4 @@ from apps.core.lists.models import Lists
 class ListsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lists
+        fields = '__all__'
