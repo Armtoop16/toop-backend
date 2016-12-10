@@ -133,7 +133,7 @@ def add_social_fields(sender, **kwargs):
             for friend_id in friends_ids:
                 try:
                     connection_account = SocialAccount.objects.filter(Q(uid=friend_id) & Q(provider='facebook'))
-                    Connection.objects.get_or_create(owner=user, social_account=connection_account)
+                    Connection.objects.get_or_create(owner=user, user=connection_account.user)
                 except SocialAccount.DoesNotExist:
                     pass
 
