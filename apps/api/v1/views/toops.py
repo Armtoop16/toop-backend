@@ -12,7 +12,13 @@ from apps.api.v1.utils.paginators import APIPaginator
 from apps.api.v1.utils.permissions import IsUserOrReadOnly
 
 
-class ToopsViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class ToopsViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
+):
     lookup_field = "pk"
     queryset = Toop.objects.all()
     pagination_class = APIPaginator
